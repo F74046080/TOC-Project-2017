@@ -22,8 +22,8 @@ python3 app.py
 ```  
 
 ## Finite State Machine  
- ![fsm](https://i.imgur.com/DblCv1R.png)
- 
+  ![fsm](https://i.imgur.com/MccyeeQ.png)
+
 
 ## Usage  
 The initial state is set to `user`.  
@@ -36,7 +36,10 @@ Every time `user` state is triggered to `advance` to `eat` state, and go next st
             "search restaurant? type:search
             want to eat fastfood? type:fast food 
             want to eat normal food? type:normal food  "
-                     -> go to eat state
+                     -> go to eat 
+    * Input: "fried" -> go to fried
+    * Input: "cheap" -> go to cheap
+        * 
     
 * eat
     * Input: "search" -> go to search state
