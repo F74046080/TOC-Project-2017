@@ -1,61 +1,82 @@
-# TOC Project 2017
+# Telegram chatbot  
+bot name:@HungerBot
+This is a chatbot of telegram which can search the shop in googlemap and help us do the decision of what we eat later.
 
-Template Code for TOC Project 2017
+### Run Locally  
+You can either setup https server or using `ngrok` as a proxy.  
 
-A telegram bot based on a finite state machine
+**`ngrok` would be used in the following instruction**  
 
-## Setup
+```sh  
+./ngrok http 5000  
+```  
 
-### Prerequisite
-* Python 3
+After that, `ngrok` would generate a https URL.  
 
-#### Install Dependency
-```sh
-pip install -r requirements.txt
-```
+You should set `WEBHOOK_URL` (in app.py) to `your-https-URL/hook`.  
 
-* pygraphviz (For visualizing Finite State Machine)
-    * [Setup pygraphviz on Ubuntu](http://www.jianshu.com/p/a3da7ecc5303)
+#### Run the sever  
 
-### Secret Data
+```sh  
+python3 app.py  
+```  
 
-`API_TOKEN` and `WEBHOOK_URL` in app.py **MUST** be set to proper values.
-Otherwise, you might not be able to run your code.
+## Finite State Machine  
+ ![fsm](https://i.imgur.com/DblCv1R.png)
+ 
 
-### Run Locally
-You can either setup https server or using `ngrok` as a proxy.
+## Usage  
+The initial state is set to `user`.  
 
-**`ngrok` would be used in the following instruction**
+Every time `user` state is triggered to `advance` to `eat` state, and go next state by triggering `advance`. At the last state, they will `go_back` to `user` state after the bot replies corresponding message.  
 
-```sh
-ngrok http 5000
-```
+* user  
+    * Input: "hungry"  
+        *   Output: 
+            "search restaurant? type:search
+            want to eat fastfood? type:fast food 
+            want to eat normal food? type:normal food  "
+                     -> go to eat state
+    
+* eat
+    * Input: "search" -> go to search state
+    * Input: "fast food" -> go to fast food state
+    * Input: "normal food" -> go to food state
 
-After that, `ngrok` would generate a https URL.
+* search    
+    * Output: "Please type where do you want to find? 輸入你想找的店" 
+        * Input: "711"(anywhere) -> go to google state
 
-You should set `WEBHOOK_URL` (in app.py) to `your-https-URL/hook`.
+* google    
+    * Output: "https://www.google.com.tw/maps/search/711"
+        ->return user state
 
-#### Run the sever
+* fast food
+    * Output: "fried or non-fried"
+        * Input: "fried" -> go to fried state
+        * Input: "non-fried" -> go to non-fried state
 
-```sh
-python3 app.py
-```
+* fried
+    * Output:"KFC"(random produce the restaurant)
+        "to go"(random produce for here or to go)    
+        -> return user state
 
-## Finite State Machine
-![fsm](./img/show-fsm.png)
+* non-fried
+    * Ouput:"subway"(random produce the restaurant)
+        "to go"(random produce for here or to go)    
+        -> return user state
+        
+* food
+    * Output: "expensive or cheap"
+        * Input: "expensive" -> go to expensive state
+        * Input: "cheap" -> go to cheap state
 
-## Usage
-The initial state is set to `user`.
-
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
-
-* user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
-
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
-
-
-## Author
-[Lee-W](https://github.com/Lee-W)
+* expensive
+    * Output: "西提"(random produce the restaurant)
+        "to go"(random produce for here or to go)    
+        -> return user state
+        
+* cheap
+    * Output: "煦悅"(random produce the restaurant)
+        "for here"(random produce for here or to go)    
+        -> return user state

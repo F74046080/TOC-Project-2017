@@ -6,37 +6,92 @@ from flask import Flask, request, send_file
 
 from fsm import TocMachine
 
+import random
 
-API_TOKEN = 'Your Telegram API Token'
-WEBHOOK_URL = 'Your Webhook URL'
+API_TOKEN = '490896274:AAGxeUtQf1Td-rqaeQKs-qLo1z0y3OICuwo'
+WEBHOOK_URL = 'https://39c61131.ngrok.io/show-fsm'
 
 app = Flask(__name__)
 bot = telegram.Bot(token=API_TOKEN)
 machine = TocMachine(
     states=[
         'user',
-        'state1',
-        'state2'
+        'eat',
+        'search',
+        'fastfood',
+		'fried',
+		'nonfried',
+		'food',
+		'expensive',
+		'cheap',
+        'google'
     ],
     transitions=[
         {
             'trigger': 'advance',
             'source': 'user',
-            'dest': 'state1',
-            'conditions': 'is_going_to_state1'
+            'dest': 'eat',
+            'conditions': 'is_going_to_eat'
         },
         {
             'trigger': 'advance',
-            'source': 'user',
-            'dest': 'state2',
-            'conditions': 'is_going_to_state2'
+            'source': 'eat',
+            'dest': 'search',
+            'conditions': 'is_going_to_search'
         },
         {
+            'trigger': 'advance',
+            'source': 'search',
+            'dest': 'google',
+            'conditions': 'is_going_to_google'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'eat',
+            'dest': 'fastfood',
+            'conditions': 'is_going_to_fastfood'
+        },
+		{
+			'trigger': 'advance',
+            'source': 'fastfood',
+            'dest': 'fried',
+            'conditions': 'is_going_to_fried'
+		},
+		{
+			'trigger': 'advance',
+            'source': 'fastfood',
+            'dest': 'nonfried',
+            'conditions': 'is_going_to_nonfried'
+		},
+		{
+			'trigger': 'advance',
+            'source': 'eat',
+            'dest': 'food',
+            'conditions': 'is_going_to_food'
+		},
+		{
+			'trigger': 'advance',
+            'source': 'food',
+            'dest': 'expensive',
+            'conditions': 'is_going_to_expensive'
+		},
+		{
+			'trigger': 'advance',
+            'source': 'food',
+            'dest': 'cheap',
+            'conditions': 'is_going_to_cheap'
+		},
+		{
             'trigger': 'go_back',
             'source': [
-                'state1',
-                'state2'
-            ],
+                'google',
+				'fried',
+				'nonfried',
+				'expensive',
+				'cheap'
+				#'fastfood',
+				#'food'
+				],
             'dest': 'user'
         }
     ],
