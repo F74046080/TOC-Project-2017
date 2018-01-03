@@ -9,7 +9,7 @@ from fsm import TocMachine
 import random
 
 API_TOKEN = '490896274:AAGxeUtQf1Td-rqaeQKs-qLo1z0y3OICuwo'
-WEBHOOK_URL = 'https://39c61131.ngrok.io/show-fsm'
+WEBHOOK_URL = 'https://31425acb.ngrok.io/hook'
 
 app = Flask(__name__)
 bot = telegram.Bot(token=API_TOKEN)
@@ -33,6 +33,18 @@ machine = TocMachine(
             'dest': 'eat',
             'conditions': 'is_going_to_eat'
         },
+        {
+            'trigger': 'advance',
+            'source': 'user',
+            'dest': 'fried',
+            'conditions': 'is_going_to_fried'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'user',
+            'dest': 'cheap',
+            'conditions': 'is_going_to_cheap'
+        }, 
         {
             'trigger': 'advance',
             'source': 'eat',
